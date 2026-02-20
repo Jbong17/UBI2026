@@ -203,20 +203,12 @@ custom_css = """
         box-shadow: 0 6px 20px rgba(107, 63, 160, 0.4);
     }
     
-    .input-section {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        border: 1px solid #f0e5f0;
-        margin-bottom: 1.5rem;
-    }
-    
     .input-label {
         color: #3d2852;
         font-weight: 600;
         font-size: 1.1rem;
         margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
         font-family: 'Poppins', sans-serif;
     }
     
@@ -238,11 +230,19 @@ custom_css = """
     }
     
     .sidebar-metric {
-        background: linear-gradient(135deg, #f0e5f0 0%, #e8d5e8 100%);
+        background: linear-gradient(135deg, #7B4FB8 0%, #6B3FA0 100%);
         padding: 1rem;
         border-radius: 8px;
         margin: 0.75rem 0;
-        border-left: 4px solid #6B3FA0;
+        border-left: 4px solid #D4AF37;
+        color: white;
+    }
+    
+    .sidebar-metric strong {
+        color: white;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.5rem;
     }
     
     .stDataFrame {
@@ -412,26 +412,24 @@ with tab1:
 
 with tab2:
     st.markdown("<div class='section-title'>Single Sample Classification</div>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #5a5a5a; font-size: 1.05rem; margin-bottom: 1.5rem;'>Enter elemental composition values for a sample to predict if it is <strong>Bohol Ubi 'Kinampay'</strong></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #5a5a5a; font-size: 1.05rem; margin-bottom: 2rem;'>Enter elemental composition values for a sample to predict if it is <strong>Bohol Ubi 'Kinampay'</strong></p>", unsafe_allow_html=True)
     
-    with st.container():
-        st.markdown("<div class='input-section'>", unsafe_allow_html=True)
-        st.markdown("<div class='input-label'>📊 Enter Elemental Values</div>", unsafe_allow_html=True)
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            K = st.number_input("Potassium (K) - ppm", min_value=5000.0, max_value=35000.0, value=15000.0, step=100.0)
-            Mn = st.number_input("Manganese (Mn) - ppm", min_value=-1.0, max_value=10.0, value=2.0, step=0.1)
-            Cu = st.number_input("Copper (Cu) - ppm", min_value=0.0, max_value=20.0, value=7.0, step=0.5)
-            Zn = st.number_input("Zinc (Zn) - ppm", min_value=0.0, max_value=25.0, value=12.0, step=0.5)
-        
-        with col2:
-            S = st.number_input("Sulfur (S) - ppm", min_value=0.0, max_value=2500.0, value=1000.0, step=50.0)
-            Cl = st.number_input("Chlorine (Cl) - ppm", min_value=0.0, max_value=3500.0, value=1200.0, step=100.0)
-            Sr = st.number_input("Strontium (Sr) - ppm", min_value=0.0, max_value=25.0, value=7.0, step=0.5)
-        
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div class='input-label'>📊 Enter Elemental Values</div>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        K = st.number_input("Potassium (K) - ppm", min_value=5000.0, max_value=35000.0, value=15000.0, step=100.0)
+        Mn = st.number_input("Manganese (Mn) - ppm", min_value=-1.0, max_value=10.0, value=2.0, step=0.1)
+        Cu = st.number_input("Copper (Cu) - ppm", min_value=0.0, max_value=20.0, value=7.0, step=0.5)
+        Zn = st.number_input("Zinc (Zn) - ppm", min_value=0.0, max_value=25.0, value=12.0, step=0.5)
+    
+    with col2:
+        S = st.number_input("Sulfur (S) - ppm", min_value=0.0, max_value=2500.0, value=1000.0, step=50.0)
+        Cl = st.number_input("Chlorine (Cl) - ppm", min_value=0.0, max_value=3500.0, value=1200.0, step=100.0)
+        Sr = st.number_input("Strontium (Sr) - ppm", min_value=0.0, max_value=25.0, value=7.0, step=0.5)
+    
+    st.markdown("<hr style='margin: 2rem 0; border: none; border-top: 1px solid #e8d5e8;'>", unsafe_allow_html=True)
     
     sample = {'K': K, 'Mn': Mn, 'Cu': Cu, 'Zn': Zn, 'S': S, 'Cl': Cl, 'Sr': Sr}
     
