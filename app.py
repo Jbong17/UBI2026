@@ -418,35 +418,24 @@ with tab2:
         st.markdown("<div class='input-section'>", unsafe_allow_html=True)
         st.markdown("<div class='input-label'>📊 Enter Elemental Values</div>", unsafe_allow_html=True)
         
-        col1, col2, col3, col4 = st.columns(2)
+        col1, col2 = st.columns(2)
         
         with col1:
             K = st.number_input("Potassium (K) - ppm", min_value=5000.0, max_value=35000.0, value=15000.0, step=100.0)
+            Mn = st.number_input("Manganese (Mn) - ppm", min_value=-1.0, max_value=10.0, value=2.0, step=0.1)
             Cu = st.number_input("Copper (Cu) - ppm", min_value=0.0, max_value=20.0, value=7.0, step=0.5)
-            S = st.number_input("Sulfur (S) - ppm", min_value=0.0, max_value=2500.0, value=1000.0, step=50.0)
-            Sr = st.number_input("Strontium (Sr) - ppm", min_value=0.0, max_value=25.0, value=7.0, step=0.5)
+            Zn = st.number_input("Zinc (Zn) - ppm", min_value=0.0, max_value=25.0, value=12.0, step=0.5)
         
         with col2:
-            Mn = st.number_input("Manganese (Mn) - ppm", min_value=-1.0, max_value=10.0, value=2.0, step=0.1)
-            Zn = st.number_input("Zinc (Zn) - ppm", min_value=0.0, max_value=25.0, value=12.0, step=0.5)
+            S = st.number_input("Sulfur (S) - ppm", min_value=0.0, max_value=2500.0, value=1000.0, step=50.0)
             Cl = st.number_input("Chlorine (Cl) - ppm", min_value=0.0, max_value=3500.0, value=1200.0, step=100.0)
+            Sr = st.number_input("Strontium (Sr) - ppm", min_value=0.0, max_value=25.0, value=7.0, step=0.5)
         
         st.markdown("</div>", unsafe_allow_html=True)
     
     sample = {'K': K, 'Mn': Mn, 'Cu': Cu, 'Zn': Zn, 'S': S, 'Cl': Cl, 'Sr': Sr}
     
-    col1, col2, col3 = st.columns([2, 1, 1])
-    
-    with col1:
-        pass
-    
-    with col2:
-        pass
-    
-    with col3:
-        classify_button = st.button("🔬 Classify Sample", use_container_width=True, key="classify_single")
-    
-    if classify_button:
+    if st.button("🔬 Classify Sample", use_container_width=True, key="classify_single"):
         try:
             with st.spinner('Analyzing elemental signature...'):
                 result = classifier.predict_single(sample)
