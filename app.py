@@ -7,19 +7,28 @@ import json
 from datetime import datetime
 import plotly.graph_objects as go
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'models'))
-from edxrf_classifier import EDXRFClassifier
-
 st.set_page_config(page_title="EDXRF Classifier", page_icon="flask", layout="wide")
 
 @st.cache_resource
 def load_classifier():
-    app_dir = os.path.dirname(os.path.abspath(__file__))
-    return EDXRFClassifier(
-        model_path=os.path.join(app_dir, 'models/random_forest_final.pkl'),
-        scaler_path=os.path.join(app_dir, 'models/feature_scaler.pkl'),
-        metadata_path=os.path.join(app_dir, 'models/model_metadata.json')
-    )
+    try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        model_path = os.path.join(current_dir, 'random_forest_final.pkl')
+        scaler_path = os.path.join(current_dir, 'feature_scaler.pkl')
+        metadata_path = os.path.join(current_dir, 'model_metadata.json')
+        
+        sys.path.insert(0, current_dir)
+        from edxrf_classifier import EDXRFClassifier
+        
+        return EDXRFClassifier(
+            model_path=model_path,
+            scaler_path=scaler_path,
+            metadata_path=metadata_path
+        )
+    except Exception as e:
+        st.error(f"Error loading classifier: {str(e)}")
+        st.stop()
 
 classifier = load_classifier()
 
@@ -66,7 +75,8 @@ if page == "Make Predictions":
             with col1:
                 st.metric("Predicted Class", result['predicted_class'])
             with col2:
-                st.metric("Confidence", str(round(result['confidence']*100, 2)) + "%")
+                confidence_pct = round(result['confidence'] * 100, 2)
+                st.metric("Confidence", f"{confidence_pct}%")
             with col3:
                 st.metric("Model Accuracy", "86.5%")
             
@@ -80,7 +90,7 @@ if page == "Make Predictions":
             
             st.success("Prediction saved!")
         except Exception as e:
-            st.error(str(e))
+            st.error(f"Error: {str(e)}")
 
 elif page == "Model Info":
     col1, col2, col3, col4 = st.columns(4)
@@ -95,10 +105,10 @@ elif page == "Model Info":
     
     st.markdown("---")
     st.markdown("### Training Information")
-    st.write("Training Samples: 52")
-    st.write("Features: K, Mn, Cu, Zn, S, Cl, Sr")
-    st.write("Classes: 0 (Minority), 1 (Majority)")
-    st.write("Class Balance: 16:36")
+    st.write("- Training Samples: 52")
+    st.write("- Features: K, Mn, Cu, Zn, S, Cl, Sr")
+    st.write("- Classes: 0 (Minority), 1 (Majority)")
+    st.write("- Class Balance: 16:36")
 
 elif page == "Batch Upload":
     st.markdown("## Batch Prediction")
@@ -118,9 +128,10 @@ elif page == "Batch Upload":
                 predictions_list = []
                 for item in results['successful']:
                     result = item['result']
+                    conf_pct = round(result['confidence'] * 100, 2)
                     predictions_list.append({
                         'Class': result['predicted_class'],
-                        'Confidence': str(round(result['confidence']*100, 2)) + "%"
+                        'Confidence': f"{conf_pct}%"
                     })
                 
                 st.markdown("### Results")
@@ -134,7 +145,7 @@ elif page == "Batch Upload":
                     mime="text/csv"
                 )
             except Exception as e:
-                st.error(str(e))
+                st.error(f"Error: {str(e)}")
 
 elif page == "History":
     st.markdown("## Prediction History")
