@@ -17,11 +17,51 @@ st.set_page_config(page_title="EDXRF Classifier", page_icon="flask", layout="wid
 
 @st.cache_resource
 def load_classifier():
+   @st.cache_resource
+def load_classifier():
+    import os
+    
+    # Get the directory where this app.py is located
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    
     return EDXRFClassifier(
-        model_path='models/random_forest_final.pkl',
-        scaler_path='models/feature_scaler.pkl',
-        metadata_path='models/model_metadata.json'
+        model_path=os.path.join(app_dir, 'models/random_forest_final.pkl'),
+        scaler_path=os.path.join(app_dir, 'models/feature_scaler.pkl'),
+        metadata_path=os.path.join(app_dir, 'models/model_metadata.json')
     )
+```
+
+### **1f. Click "Commit changes"**
+```
+Commit message: Fix file paths for Streamlit Cloud
+```
+
+### **1g. Wait 2-3 minutes**
+
+Streamlit will **auto-redeploy** and it should work!
+
+---
+
+## **OPTION 2: Check File Structure on GitHub**
+
+If Option 1 doesn't work, let's verify your files are uploaded correctly:
+
+### **2a. Go to your GitHub repo**
+
+### **2b. Check the file structure:**
+
+You should see:
+```
+edxrf-streamlit/
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── models/
+    ├── edxrf_classifier.py
+    ├── random_forest_final.pkl
+    ├── feature_scaler.pkl
+    └── model_metadata.json
 
 classifier = load_classifier()
 
