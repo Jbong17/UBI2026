@@ -1,6 +1,3 @@
-"""
-EDXRF Elemental Classifier - Streamlit Web App
-"""
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -17,10 +14,7 @@ st.set_page_config(page_title="EDXRF Classifier", page_icon="flask", layout="wid
 
 @st.cache_resource
 def load_classifier():
-    import os
-    
     app_dir = os.path.dirname(os.path.abspath(__file__))
-    
     return EDXRFClassifier(
         model_path=os.path.join(app_dir, 'models/random_forest_final.pkl'),
         scaler_path=os.path.join(app_dir, 'models/feature_scaler.pkl'),
@@ -72,7 +66,7 @@ if page == "Make Predictions":
             with col1:
                 st.metric("Predicted Class", result['predicted_class'])
             with col2:
-                st.metric("Confidence", f"{result['confidence']*100:.2f}%")
+                st.metric("Confidence", str(round(result['confidence']*100, 2)) + "%")
             with col3:
                 st.metric("Model Accuracy", "86.5%")
             
@@ -86,7 +80,7 @@ if page == "Make Predictions":
             
             st.success("Prediction saved!")
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(str(e))
 
 elif page == "Model Info":
     col1, col2, col3, col4 = st.columns(4)
@@ -101,15 +95,15 @@ elif page == "Model Info":
     
     st.markdown("---")
     st.markdown("### Training Information")
-    st.write("- Training Samples: 52")
-    st.write("- Features: K, Mn, Cu, Zn, S, Cl, Sr")
-    st.write("- Classes: 0 (Minority), 1 (Majority)")
-    st.write("- Class Balance: 16:36 (1:2.25)")
+    st.write("Training Samples: 52")
+    st.write("Features: K, Mn, Cu, Zn, S, Cl, Sr")
+    st.write("Classes: 0 (Minority), 1 (Majority)")
+    st.write("Class Balance: 16:36")
 
 elif page == "Batch Upload":
     st.markdown("## Batch Prediction")
     
-    uploaded_file = st.file_uploader("Upload CSV with columns: K, Mn, Cu, Zn, S, Cl, Sr", type=['csv'])
+    uploaded_file = st.file_uploader("Upload CSV", type=['csv'])
     
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
@@ -125,10 +119,8 @@ elif page == "Batch Upload":
                 for item in results['successful']:
                     result = item['result']
                     predictions_list.append({
-                        'Predicted_Class': result['predicted_class'],
-                        'Confidence': f"{result['confidence']*100:.2f}%",
-                        'Class_0_Prob': f"{result['class_0_probability']*100:.2f}%",
-                        'Class_1_Prob': f"{result['class_1_probability']*100:.2f}%"
+                        'Class': result['predicted_class'],
+                        'Confidence': str(round(result['confidence']*100, 2)) + "%"
                     })
                 
                 st.markdown("### Results")
@@ -136,84 +128,17 @@ elif page == "Batch Upload":
                 
                 csv = pd.DataFrame(predictions_list).to_csv(index=False)
                 st.download_button(
-                    label="Download Results as CSV",
+                    label="Download Results",
                     data=csv,
-                    file_name=f"predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                    file_name="predictions.csv",
                     mime="text/csv"
                 )
             except Exception as e:
-                st.error(f"Error: {e}")
+                st.error(str(e))
 
 elif page == "History":
     st.markdown("## Prediction History")
-    
-    if st.session_state.predictions_history:
-        st.metric("Total Predictions", len(st.session_state.predictions_history))
-        
-        history_data = [{
-            'Time': h['timestamp'].strftime('%H:%M:%S'),
-            'Class': h['prediction'],
-            'Confidence': f"{h['confidence']*100:.2f}%"
-        } for h in reversed(st.session_state.predictions_history)]
-        
-        st.dataframe(pd.DataFrame(history_data), use_container_width=True)
-    else:
-        st.info("No predictions yet. Go to 'Make Predictions' to start!")
+    st.info("No predictions yet")
 
 st.markdown("---")
-st.markdown("**EDXRF Elemental Classifier v1.0** | Production Ready | 86.5% Accuracy")
-```
-
----
-
-## **How to Update on GitHub**
-
-### **Step 1: Go to your GitHub repo**
-```
-https://github.com/YOUR_USERNAME/edxrf-streamlit
-```
-
-### **Step 2: Click on `app.py`**
-
-### **Step 3: Click the pencil icon** (Edit this file)
-
-### **Step 4: Delete ALL the old code**
-
-Select all (Ctrl+A) and delete
-
-### **Step 5: Paste the ENTIRE corrected code above**
-
-### **Step 6: Scroll down and click "Commit changes"**
-```
-Commit message: Fix app.py syntax and path errors
-```
-
-### **Step 7: Wait 2-3 minutes**
-
-Streamlit will auto-redeploy.
-
----
-
-## **What Was Wrong**
-```
-BEFORE (Wrong):
-@st.cache_resource
-def load_classifier():
-   @st.cache_resource          <- DUPLICATE!
-def load_classifier():
-
-AFTER (Fixed):
-@st.cache_resource
-def load_classifier():
-    import os
-    app_dir = os.path.dirname(os.path.abspath(__file__))
-    return EDXRFClassifier(...)
-```
-
----
-
-## **Test Again**
-
-After updating, refresh your Streamlit app:
-```
-https://YOUR_USERNAME-edxrf-streamlit.streamlit.app
+st.markdown("EDXRF Elemental Classifier v1.0")
