@@ -1,0 +1,28 @@
+{
+  "model_type": "Random Forest",
+  "loocv_accuracy": 0.865,
+  "training_samples": 52,
+  "features": [
+    "K",
+    "Mn",
+    "Cu",
+    "Zn",
+    "S",
+    "Cl",
+    "Sr"
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "class_names": [
+    "Class 0",
+    "Class 1"
+  ],
+  "feature_scaling": "StandardScaler",
+  "date_trained": "2026-02-20 16:53:18.003288",
+  "expected_error_rate": 0.135,
+  "class_imbalance": "16:36 (1:2.25)",
+  "sensitivity_class_0": 0.688,
+  "specificity_class_1": 0.944
+}
