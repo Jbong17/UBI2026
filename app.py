@@ -86,6 +86,28 @@ custom_css = """
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
+    .element-card {
+        background: linear-gradient(135deg, #E8D5E8 0%, #F0E5F0 100%);
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #6B3FA0;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .element-title {
+        color: #4A2C6B;
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .element-description {
+        color: #333;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
     .confidence-high {
         color: #27AE60;
         font-weight: bold;
@@ -126,7 +148,7 @@ classifier = load_classifier()
 if 'predictions_history' not in st.session_state:
     st.session_state.predictions_history = []
 
-st.markdown("<h1 class='header-title'>🍠 AI-assisted Predictive Classification of Purple Yam (Ubi 'Kinampay') and Geographic Provenance</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='header-title'>🍠 AI-assisted Predictive Variety Classification and Geographic Provenance of Purple Yam (Bohol Ubi 'Kinampay')</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #6B3FA0; font-size: 16px;'>Advanced Forensic Elemental Analysis for Variety Authentication and Origin Verification</p>", unsafe_allow_html=True)
 
 st.sidebar.markdown("## 🔬 Model Information")
@@ -172,32 +194,47 @@ with tab1:
     
     st.markdown("---")
     
-    st.markdown("""
-    ### Elemental Signature Analysis
+    st.markdown("## Elemental Signature Analysis")
+    st.markdown("The model analyzes **7 key elemental compounds** that form a unique 'fingerprint' for geographic origin:")
     
-    The model analyzes **7 key elemental compounds** that form a unique "fingerprint" for geographic origin:
-    """)
+    elements_data = [
+        {
+            'element': 'K (Potassium)',
+            'description': 'Indicator of soil potassium availability and fertilization practices. Reflects nutrient management and soil characteristics.'
+        },
+        {
+            'element': 'Mn (Manganese)',
+            'description': 'Reflects soil oxidation state and mineral content. Indicates weathering patterns and geological substrate composition.'
+        },
+        {
+            'element': 'Cu (Copper)',
+            'description': 'Bioaccumulation from soil and environmental exposure. Traces pesticide use, mining proximity, and agricultural practices.'
+        },
+        {
+            'element': 'Zn (Zinc)',
+            'description': 'Essential micronutrient with geographic variation. Linked to soil pH, organic matter, and regional geochemistry.'
+        },
+        {
+            'element': 'S (Sulfur)',
+            'description': 'Related to soil mineralogy and volcanic activity. Indicates atmospheric deposition and industrial influence patterns.'
+        },
+        {
+            'element': 'Cl (Chlorine)',
+            'description': 'Indicator of coastal influence and atmospheric deposition. Strong marker for proximity to marine environments.'
+        },
+        {
+            'element': 'Sr (Strontium)',
+            'description': 'Geological marker with strong geographic correlation. Strontium isotope ratios are region-specific geological fingerprints.'
+        }
+    ]
     
-    elements_info = {
-        'K (Potassium)': 'Indicator of soil potassium availability and fertilization practices',
-        'Mn (Manganese)': 'Reflects soil oxidation state and mineral content',
-        'Cu (Copper)': 'Bioaccumulation from soil and environmental exposure',
-        'Zn (Zinc)': 'Essential micronutrient with geographic variation',
-        'S (Sulfur)': 'Related to soil mineralogy and volcanic activity',
-        'Cl (Chlorine)': 'Indicator of coastal influence and atmospheric deposition',
-        'Sr (Strontium)': 'Geological marker with strong geographic correlation'
-    }
-    
-    cols = st.columns(2)
-    for idx, (element, description) in enumerate(elements_info.items()):
-        col = cols[idx % 2]
-        with col:
-            st.markdown(f"""
-            <div class='model-info-box'>
-            <strong>{element}</strong><br>
-            {description}
-            </div>
-            """, unsafe_allow_html=True)
+    for elem in elements_data:
+        st.markdown(f"""
+        <div class='element-card'>
+            <div class='element-title'>{elem['element']}</div>
+            <div class='element-description'>{elem['description']}</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -463,7 +500,7 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #6B3FA0; padding: 20px;'>
 <strong>🍠 Purple Yam 'Kinampay' Forensic Classification System v1.0</strong><br>
-<small>AI-assisted Authentication & Geographic Provenance Verification<br>
+<small>AI-assisted Predictive Variety Classification & Geographic Provenance Verification<br>
 Model Accuracy: 86.5% | Forensic Elemental Analysis | EDXRF-Based Classification</small>
 </div>
 """, unsafe_allow_html=True)
